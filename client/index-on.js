@@ -1,4 +1,4 @@
-/* Dynamically import a local module, which in turn imports '@splitsoftware/browser-rum-agent' for tree-shaking, resulting in a smaller app */
+/* Dynamically import a local module, which in turn imports '@splitsoftware/browser-split-suite' for tree-shaking, resulting in a smaller app */
 import('./browser-split-suite').then(({ SplitSuite }) => {
   
   const client = SplitSuite({

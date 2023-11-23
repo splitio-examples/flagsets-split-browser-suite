@@ -1,7 +1,7 @@
-/* Statically import '@splitsoftware/browser-suite' from NPM */
-import { SplitSuite } from '@splitsoftware/browser-suite';
+/* Dynamically import a local module, which in turn imports '@splitsoftware/browser-split-suite' for tree-shaking, resulting in a smaller app */
+import('./browser-split-suite').then(({ SplitSuite }) => {
 
-const client = SplitSuite({
+  const client = SplitSuite({
     core: {
       authorizationKey: process.env.CLIENT_SIDE_SDK_KEY,
   
@@ -21,3 +21,7 @@ const client = SplitSuite({
 
     document.getElementById('street_img').src = "https://i.imgur.com/q9b5x97" + imageSize + ".png";
   });
+
+}).catch(error => {
+  console.log('An error occurred while loading the module: ' + error);
+});
