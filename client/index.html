@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= htmlWebpackPlugin.options.title %>
+  </title>
+  <script>
+    // Collect errors while the Agent is loading
+    (function (w) {
+      var g = w.__error = { e1: [], l1: function (e) { g.e1.push(e); }, e2: [], l2: function (e) { g.e2.push(e); } };
+      w.addEventListener('error', g.l1);
+      w.addEventListener('unhandledrejection', g.l2);
+    }(window))
+  </script>
+</head>
+
+<body>
+  <h1><%= htmlWebpackPlugin.options.title %></h1>
+
+  <button class="js-error-btn">JS Error Click</button>
+  <button class="network-error-xml-btn">Network Error Click (Using XMLHttpRequest)</button>
+  <button class="network-error-fetch-btn">Network Error Click (Using fetch)</button>
+  <button class="custom-error-btn">Custom Error Click</button>
+  <button class="route-change">Route Change (hash update)</button>
+
+  <br />
+  <img id="split_logo" src="https://i.imgur.com/B97e6K9.png" style="max-height: 400px;" />
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+    aliqua. Penatibus et magnis dis parturient montes. Senectus et netus et malesuada fames ac turpis. Nunc aliquet
+    bibendum enim facilisis gravida neque convallis a. Purus ut faucibus pulvinar elementum integer enim neque volutpat
+    ac. Nulla posuere sollicitudin aliquam ultrices sagittis orci a scelerisque. Ultrices tincidunt arcu non sodales
+    neque. Massa sed elementum tempus egestas sed sed risus pretium quam. Nec tincidunt praesent semper feugiat nibh sed
+    pulvinar proin. Volutpat sed cras ornare arcu dui vivamus arcu felis bibendum. Tempor commodo ullamcorper a lacus.
+    Pharetra convallis posuere morbi leo urna molestie. Duis ultricies lacus sed turpis tincidunt id aliquet. Bibendum
+    enim facilisis gravida neque. Gravida quis blandit turpis cursus in hac habitasse platea.
+  </p>
+  <img id="street_img" />
+
+  <!-- imgur embed widget -->
+  <blockquote class="imgur-embed-pub" lang="en" data-id="a/8aOpHV6">
+    <a href="//imgur.com/8aOpHV6"></a>
+  </blockquote>
+  <script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+  <!-- jquery -->
+  <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+    crossorigin="anonymous"></script>
+  <!-- A custom script. -->
+  <script type="text/javascript">
+    (function () {
+      console.log('So, javascript is a powerful language. It runs fast and everywhere!');
+    })();
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const btnJs = document.getElementsByClassName('js-error-btn');
+
+      btnJs[0].addEventListener('click', () => {
+        notExistFn();
+      });
+
+      const btnNetworkXml = document.getElementsByClassName('network-error-xml-btn');
+
+      btnNetworkXml[0].addEventListener('click', () => {
+        var req = new XMLHttpRequest();
+        req.open('GET', 'http://localhost:8084/error', true);
+
+        req.onreadystatechange = function (oEvent) {
+          if (req.readyState === 4) {
+            if (req.status === 200) {
+              console.log(req.responseText)
+            } else {
+              throw Error(req.statusText);
+              console.log("Error", req.statusText);
+            }
+          }
+        };
+
+        req.send();
+      });
+
+      const btnNetworkFetch = document.getElementsByClassName('network-error-fetch-btn');
+
+      btnNetworkFetch[0].addEventListener('click', () => {
+        fetch('http://localhost:8084/error')
+          .then(response => {
+            if (!response.ok) {
+              throw Error(response.statusText);
+            }
+          });
+      });
+
+      const btnCustom = document.getElementsByClassName('custom-error-btn');
+
+      btnCustom[0].addEventListener('click', () => {
+        SplitRumAgent.trackError('Some error');
+      });
+
+      const btnRouteChange = document.getElementsByClassName('route-change');
+
+      btnRouteChange[0].addEventListener('click', () => {
+        window.location.hash = Math.random().toString(36).substring(7);
+      });
+    })
+  </script>
+</body>
+
+</html>
