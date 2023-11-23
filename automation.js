@@ -62,7 +62,7 @@ const NETWORK_CONDITIONS = {
     await page.emulateNetworkConditions(
       (networkSpeed in NETWORK_CONDITIONS)
       ? NETWORK_CONDITIONS[networkSpeed]
-      : NETWORK_CONDITIONS.Good3G
+      : NETWORK_CONDITIONS.Regular3G
     );
 
     // Navigate to URL
