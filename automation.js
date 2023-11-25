@@ -48,10 +48,13 @@ const NETWORK_CONDITIONS = {
   const browser = await puppeteer.launch({headless: false, defaultViewport: null});
 
   for (; i < SAMPLE_SIZE; i++) {
+
+    
     console.log(`Running ${i} of ${SAMPLE_SIZE}`);
 
-    // Open new page
-    const page = await browser.newPage();
+    // Open a new tab in a new session
+    const context = await browser.createIncognitoBrowserContext();
+    const page = await context.newPage();
 
     // Emulate network conditions and disable cache to simulate new users
     await page.setCacheEnabled(false);
