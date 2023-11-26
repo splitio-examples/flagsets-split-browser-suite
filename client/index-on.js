@@ -1,6 +1,9 @@
+const { Timer } = require('./../utils/timer');
+
 /* Dynamically import a local module, which in turn imports '@splitsoftware/browser-split-suite' for tree-shaking, resulting in a smaller app */
-import('./browser-split-suite').then(({ SplitSuite, DebugLogger }) => {
-  
+import('./browser-split-suite').then(({ SplitSuite, DebugLogger }) => {  
+
+  const timer = Timer();
   const client = SplitSuite({
     core: {
       authorizationKey: process.env.CLIENT_SIDE_SDK_KEY,
@@ -21,8 +24,9 @@ import('./browser-split-suite').then(({ SplitSuite, DebugLogger }) => {
 
   client.on(client.Event.SDK_READY, function() {
 
-    console.log( "2e. track SDK_READY event: ", client.track('user', `splitsdk.${ client.Event.SDK_READY.replaceAll('::', '_') }`, 30.0) );
-    
+    console.log( "2e. track SDK_READY event: ", client.track('user', `splitsdk.${ client.Event.SDK_READY.replaceAll('::', '_') }`, timer.duration()) );
+    console.log( `time is ${timer.duration()}` );
+
     let imageSize = client.getTreatment(process.env.FEATURE_FLAG_IMAGE_SIZE);
 
     // if the imageSize value is not one of the the imgur size modifiers, then don't use it
