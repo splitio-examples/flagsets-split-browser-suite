@@ -19,6 +19,8 @@ import('./browser-split-suite').then(({ SplitSuite }) => {
   }).client();
 
   client.on(client.Event.SDK_READY, function() {
+
+    client.track(process.env.CLIENT_SIDE_SDK_KEY, 'user', 'split.sdk_ready')
     
     let imageSize = client.getTreatment(process.env.FEATURE_FLAG_IMAGE_SIZE);
 
