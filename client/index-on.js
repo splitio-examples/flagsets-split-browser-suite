@@ -1,5 +1,5 @@
 /* Dynamically import a local module, which in turn imports '@splitsoftware/browser-split-suite' for tree-shaking, resulting in a smaller app */
-import('./browser-split-suite').then(({ SplitSuite }) => {
+import('./browser-split-suite').then(({ SplitSuite, DebugLogger }) => {
   
   const client = SplitSuite({
     core: {
@@ -15,12 +15,13 @@ import('./browser-split-suite').then(({ SplitSuite }) => {
         type: 'bySet',
         values: ['frontend']
       }]
-    }
-  }).client();
+    },
+    debug: DebugLogger()
+  }).client();  
 
   client.on(client.Event.SDK_READY, function() {
 
-    client.track(process.env.CLIENT_SIDE_SDK_KEY, 'user', 'split.sdk_ready')
+    console.log( "2e. track SDK_READY event: ", client.track('user', `splitsdk.${ client.Event.SDK_READY.replaceAll('::', '_') }`, 30.0) );
     
     let imageSize = client.getTreatment(process.env.FEATURE_FLAG_IMAGE_SIZE);
 

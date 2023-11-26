@@ -2,4 +2,4 @@
 // - `import * as SplitSuiteModule from '@splitsoftware/browser-suite';`
 // - `const { SplitSuite } = require('@splitsoftware/browser-suite');`
 
-export { SplitSuite } from '@splitsoftware/browser-suite';
+export { SplitSuite, DebugLogger } from '@splitsoftware/browser-suite';
