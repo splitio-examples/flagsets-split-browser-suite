@@ -12,10 +12,6 @@ This example assumes you have set up feature flags in Split UI, with traffic typ
 2. Add your Split SDK keys and feature flag names to `.env`. (Defaults will be used for any flags that are not created in Split UI or named in the `.env` file.)
 3. Run `npm install` to install dependencies.
 4. Run `npm run serve` to build the app and start the server. The Web page will be served at `http://localhost:3000/?id=<user-id>`, where `<user-id>` is a unique identifier for the user, used by the Split SDK to bucket the user into a treatment (one of the outcomes defined in each feature flag).
-5. Run `npm run automation` to run the automation script. The script can take some time to complete, as it will generate events and impressions by navigating to the webpage multiple times with different user IDs, using [Puppeteer and Chrome](https://www.npmjs.com/package/puppeteer). You can grab a coffee. :)
-6. Open the Split UI, click on a feature flag's Metrics impact tab, and analyze the metric results. You can click 'View more' on a Metric card to visualize metric measurements. See more about the ["Metrics impact tab"](https://help.split.io/hc/en-us/articles/360020844451-Metrics-impact-tab).
-
-![Split UI](./screenshot.png)
 
 # Contents
 
@@ -32,8 +28,22 @@ This example assumes you have set up feature flags in Split UI, with traffic typ
 - `npm run dev`: starts Webpack with watch flag and NodeJS server with Nodemon, so that the application is rebuilt and the server restarted on file changes in the `/client` and `/server` folders respectively, for development purposes.
 - `npm run build`: builds the two variants of the application.
 - `npm run serve`: builds the two variants of the application and starts the NodeJS server.
-- `npm run automation`: runs the automation script.
+- `npm run automation`: runs the automation script that will generate events and impressions by navigating to the webpage multiple times with different user IDs, using [Puppeteer and Chrome](https://www.npmjs.com/package/puppeteer). Before running this script, we recommend you set up a Metric to measure the average Split SDK initialization time, as described in the [Set up a Split Metric and view results](https://github.com/splitio-examples/flagsets-split-browser-suite/tree/measure_sdk_ready#set-up-a-split-metric-and-view-results) section below.
 
 # Tutorial - Split flag sets - Filtering feature flags for optimized webpage performance
 
 If you'd like to get a taste of the performance improvements possible with flag sets, see the [blog](https://www.split.io/blog/): 'Throw off webpage latency with Split flag sets'. Since you are already peering into the code, check it out and see Split's webpage optimization capabilities in action!
+
+# Set up a Split Metric and view results
+
+To measure the custom event `splitsdk.init_ready` ([created by the client code](https://github.com/splitio-examples/flagsets-split-browser-suite/blob/8b3bf25da041734c35cb0671f5a005daa911b91a/client/split.js#L68C16-L69)), you'll need to create a metric, as shown below.
+
+![Split UI](./performance_metric.jpg)
+
+You can run the automation script to automate 250 page views. (The command would be: `npm run automation 0 250`.) This allows you to see the metric results in the Split UI.
+
+Open the Split UI, click on the a feature flag's Metrics impact tab (you can adjust the **Experimental settings** to `Sequential testing`, with a Minimum sample size of `100`), and analyze the metric results.
+
+Click 'View more' on a Metric card to visualize metric measurements. See more about the ["Metrics impact tab"](https://help.split.io/hc/en-us/articles/360020844451-Metrics-impact-tab).
+
+![Split UI](./results.png)
