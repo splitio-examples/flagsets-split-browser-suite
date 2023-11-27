@@ -5,7 +5,7 @@ console.log('starting index-on');
 
   console.log('continuing index-on *');
 
-  const splitClient = await getSplitClientForFlagset('clientside'); // doesn't return from here
+  const splitClient = await getSplitClientForFlagset(process.env.FLAGSET_CLIENT_SIDE);
   console.log(`client is ${splitClient}`);
   await splitClient.ready();
   console.log('before');
@@ -20,6 +20,6 @@ console.log('starting index-on');
   document.getElementById('street_img').src = "https://i.imgur.com/q9b5x97" + imageSize + ".png";
 
   console.log('finishing index-on');
-})();
+}) ();
 
 console.log('finished index-on');

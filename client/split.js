@@ -36,53 +36,51 @@ async function getSplitClientForFlagset(flagsetname) {
 
     console.log(`flagset name is ${flagsetname}`);
 
-    return new Promise(async () => {
-        console.log('hi');
+    const trafficType = process.env.TRAFFIC_TYPE;
 
-        if (!client) {
+    if (!client) {
 
-            console.log("NEW CLIENT");
+        console.log("NEW CLIENT");
 
-            /* Dynamically import a local module, which in turn imports '@splitsoftware/browser-split-suite' for tree-shaking, resulting in a smaller app */
-            const { SplitSuite, DebugLogger } = await import('./browser-split-suite');
-            //import('./browser-split-suite').then(({ SplitSuite, DebugLogger }) => {  
+        // Dynamically import a local module, which in turn imports '@splitsoftware/browser-split-suite' for tree-shaking, resulting in a smaller app
+        const { SplitSuite, DebugLogger } = await import('./browser-split-suite');
 
-            let config = {
-                core: {
-                    authorizationKey: process.env.CLIENT_SIDE_SDK_KEY,
-                
-                    // In this example, we get the user key from URL query parameter `id`
-                    key: new URLSearchParams(window.location.search).get('id'),
-                    // Specifying the traffic type for the user key is optional, the value is 'user' by default
-                    trafficType: 'user'
-                },
-                debug: DebugLogger()
+        let config = {
+            core: {
+                authorizationKey: process.env.CLIENT_SIDE_SDK_KEY,
+            
+                // In this example, we get the user key from URL query parameter `id`
+                key: new URLSearchParams(window.location.search).get('id'),
+                // Specifying the traffic type for the user key is optional, the value is 'user' by default
+                trafficType: trafficType
+            },
+            debug: DebugLogger()
+        };
+
+        if(flagsetname !== ''){
+            config.sync = {
+                splitFilters: [{
+                    type: 'bySet',
+                    values: [flagsetname]
+                }]
             };
-
-            if(flagsetname !== ''){
-                config.sync = {
-                    splitFilters: [{
-                        type: 'bySet',
-                        values: [flagsetname]
-                    }]
-                };
-            }
-            const timer = Timer();
-            client = SplitSuite(config).client();
-            console.log(`have client: ${client}`);
-        
-            client.on(client.Event.SDK_READY, function() {
-                console.log( "2e. track SDK_READY event: ", client.track('user', `splitsdk.${ client.Event.SDK_READY.replaceAll('::', '_') }`, timer.duration()) );
-                console.log( `time is ${timer.duration()}` );
-            });
-        
-            console.log(`returning client: ${client}`);
-            return client;
         }
-            /*}).catch(error => {
-                console.log('An error occurred while loading the module: ' + error);
-            });*/
-    });
+        const timer = Timer();
+        client = SplitSuite(config).client();
+        console.log(`have client: ${client}`);
+    
+        client.on(client.Event.SDK_READY, function() {
+            console.log( "2e. track SDK_READY event: ", client.track(trafficType, `splitsdk.${ client.Event.SDK_READY.replaceAll('::', '_') }`, timer.duration()) );
+            console.log( `time is ${timer.duration()}` );
+        });
+    
+        console.log(`returning client: ${client}`);
+        return await client;
+
+    } else {
+
+        return client;
+    }
 }
 
 module.exports = getSplitClientForFlagset;
