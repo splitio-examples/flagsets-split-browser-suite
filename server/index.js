@@ -11,11 +11,13 @@ const splitClient = getSplitClient();
 
 app.use('/on', express.static(path.join(__dirname, '..', 'dist', 'on')));
 app.use('/off', express.static(path.join(__dirname, '..', 'dist', 'off')));
-app.use('/', (req, res, next) => {
+app.use('/', async (req, res, next) => {
   if (req.query.id) {
 
+    await splitClient.ready();
+    
     const optimizePage = splitClient.getTreatment(req.query.id, process.env.FEATURE_FLAG_OPTIMIZE_PAGE);
-
+  
     if (optimizePage === 'on') {
       return res.redirect('/on' + req.url);
     } else {
