@@ -13,10 +13,10 @@ let client;
  * @function getSplitClient
  * @returns {SplitIO.IClient} The singleton instance of the ISuiteSDK.client()
  */
-/*function getSplitClient() {
+async function getSplitClient() {
     console.log("calling getSplitClient()");
-    return getSplitClientForFlagset('');
-}*/
+    return await getSplitClientForFlagset();
+}
 
 /**
  * Create (instantiate) a SplitSuite (Split SDK) client. The client is used to track events and evaluate feature flags.
@@ -32,7 +32,7 @@ let client;
  * @returns {SplitIO.IClient} 
  * The singleton instance of the ISuiteSDK.client()
  */
-async function getSplitClientForFlagset(flagsetname) {
+async function getSplitClientForFlagset(flagsetname = '') {
 
     console.log(`flagset name is ${flagsetname}`);
 
@@ -79,8 +79,9 @@ async function getSplitClientForFlagset(flagsetname) {
 
     } else {
 
+        console.log('returning already-defined client (not sure if it should be within a promise)');
         return client;
     }
 }
 
-module.exports = getSplitClientForFlagset;
+module.exports = { getSplitClient, getSplitClientForFlagset };
