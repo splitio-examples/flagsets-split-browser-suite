@@ -32,7 +32,7 @@ This example assumes you have set up feature flags in Split UI, with traffic typ
 
 # Tutorial - Split flag sets - Filtering feature flags for optimized webpage performance
 
-If you'd like to get a taste of the performance improvements possible with flag sets, see the [blog](https://www.split.io/blog/): 'Throw off webpage latency with Split flag sets'. Since you are already peering into the code, check it out and see Split's webpage optimization capabilities in action!
+If you'd like to get a taste of the performance improvements possible with flag sets, see the [blog](https://www.split.io/blog/): 'Minimize webpage latency with Split flag sets'. Since you are already peering into the code, check it out and see Split's webpage optimization capabilities in action!
 
 # Set up a Split Metric and view results
 
