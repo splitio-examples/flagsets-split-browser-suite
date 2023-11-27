@@ -13,10 +13,7 @@ let client;
  * @function getSplitClient
  * @returns {SplitIO.IClient} The singleton instance of the ISuiteSDK.client()
  */
-async function getSplitClient() {
-    console.log("calling getSplitClient()");
-    return await getSplitClientForFlagset();
-}
+const getSplitClient = async () => await getSplitClientForFlagset();
 
 /**
  * Create (instantiate) a SplitSuite (Split SDK) client. The client is used to track events and evaluate feature flags.
@@ -34,16 +31,12 @@ async function getSplitClient() {
  */
 async function getSplitClientForFlagset(flagsetname = '') {
 
-    console.log(`flagset name is ${flagsetname}`);
-
     const trafficType = process.env.TRAFFIC_TYPE;
 
     if (!client) {
 
-        console.log("NEW CLIENT");
-
         // Dynamically import a local module, which in turn imports '@splitsoftware/browser-split-suite' for tree-shaking, resulting in a smaller app
-        const { SplitSuite, DebugLogger } = await import('./browser-split-suite');
+        const { SplitSuite /*, DebugLogger*/ } = await import('./browser-split-suite');
 
         let config = {
             core: {
@@ -53,8 +46,9 @@ async function getSplitClientForFlagset(flagsetname = '') {
                 key: new URLSearchParams(window.location.search).get('id'),
                 // Specifying the traffic type for the user key is optional, the value is 'user' by default
                 trafficType: trafficType
-            },
-            debug: DebugLogger()
+
+            }//,
+            //debug: DebugLogger()
         };
 
         if(flagsetname !== ''){
@@ -65,21 +59,22 @@ async function getSplitClientForFlagset(flagsetname = '') {
                 }]
             };
         }
+
         const timer = Timer();
+
         client = SplitSuite(config).client();
-        console.log(`have client: ${client}`);
-    
         client.on(client.Event.SDK_READY, function() {
-            console.log( "2e. track SDK_READY event: ", client.track(trafficType, `splitsdk.${ client.Event.SDK_READY.replaceAll('::', '_') }`, timer.duration()) );
-            console.log( `time is ${timer.duration()}` );
+
+            // send latency (SDK initialization time, including time downloading Split definitions) to Split cloud as a custom event
+            client.track(trafficType, `splitsdk.${ client.Event.SDK_READY.replaceAll('::', '_') }`, timer.duration());
+
+            console.log(`Split SDK initialized in ${timer.duration()} ms`)
         });
-    
-        console.log(`returning client: ${client}`);
+        
         return await client;
 
     } else {
 
-        console.log('returning already-defined client (not sure if it should be within a promise)');
         return client;
     }
 }

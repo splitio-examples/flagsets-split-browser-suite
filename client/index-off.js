@@ -2,7 +2,6 @@ const { getSplitClient } = require('./split.js');
 
 (async () => {
 
-  console.log("running off variant");
   const splitClient = await getSplitClient();
   await splitClient.ready();
 
