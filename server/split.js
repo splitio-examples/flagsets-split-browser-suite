@@ -3,7 +3,7 @@
 // the Split (feature flag and segment) definitions are downloaded and synchronized.
 
 require('dotenv').config();
-const { SplitFactory } = require('@splitsoftware/splitio');
+const { SplitFactory } = require('@splitsoftware/splitio'); // Split Node.js SDK (a server-side SDK)
 
 // the SDK client singleton instance
 let client;

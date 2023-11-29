@@ -1,8 +1,8 @@
-const { getSplitClientForFlagset } = require('./split.js');
+const { getSplitClient } = require('./split.js');
 
 (async () => {
 
-  const splitClient = await getSplitClientForFlagset(process.env.FLAGSET_CLIENT_SIDE);
+  const splitClient = await getSplitClient(process.env.FLAGSET_CLIENT_SIDE);
   await splitClient.ready();
 
   let imageSize = splitClient.getTreatment(process.env.FEATURE_FLAG_IMAGE_SIZE);

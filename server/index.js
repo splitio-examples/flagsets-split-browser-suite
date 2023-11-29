@@ -11,11 +11,9 @@ const splitClient = getSplitClient();
 
 app.use('/on', express.static(path.join(__dirname, '..', 'dist', 'on')));
 app.use('/off', express.static(path.join(__dirname, '..', 'dist', 'off')));
-app.use('/', async (req, res, next) => {
+app.use('/', (req, res, next) => {
   if (req.query.id) {
 
-    await splitClient.ready();
-    
     const optimizePage = splitClient.getTreatment(req.query.id, process.env.FEATURE_FLAG_OPTIMIZE_PAGE);
   
     if (optimizePage === 'on') {
@@ -28,6 +26,8 @@ app.use('/', async (req, res, next) => {
   next();
 });
 
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
+splitClient.ready().then(() => {
+  app.listen(3000, () => {
+    console.log('Server listening on port 3000');
+  });
 });

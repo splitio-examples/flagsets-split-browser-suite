@@ -10,26 +10,16 @@ let client;
  *
  * NOTE: This method creates a single instance (singleton) of the Split SDK client.
  *
- * @function getSplitClient
- * @returns {SplitIO.IClient} The singleton instance of the ISuiteSDK.client()
- */
-const getSplitClient = async () => await getSplitClientForFlagset();
-
-/**
- * Create (instantiate) a SplitSuite (Split SDK) client. The client is used to track events and evaluate feature flags.
- *
- * NOTE: This method creates a single instance (singleton) of the Split SDK client.
- *
  * @function getSplitClientForFlagset
  * 
- * @param {string} flagsetname
+ * @param {string} flagSetName
  * The name of the flag set already associated with feature flags in Split cloud (this can be done in Split UI).
  * If provided, the flag set name is used to filter the flags synchronized from Split cloud, resulting in a smaller payload.
  * 
  * @returns {SplitIO.IClient} 
  * The singleton instance of the ISuiteSDK.client()
  */
-async function getSplitClientForFlagset(flagsetname = '') {
+async function getSplitClient(flagSetName = '') {
 
     const trafficType = process.env.TRAFFIC_TYPE;
 
@@ -47,15 +37,15 @@ async function getSplitClientForFlagset(flagsetname = '') {
                 // Specifying the traffic type for the user key is optional, the value is 'user' by default
                 trafficType: trafficType
 
-            }//,
+            },
             //debug: DebugLogger()
         };
 
-        if(flagsetname !== ''){
+        if(flagSetName !== ''){
             config.sync = {
                 splitFilters: [{
                     type: 'bySet',
-                    values: [flagsetname]
+                    values: [flagSetName]
                 }]
             };
         }
@@ -79,4 +69,4 @@ async function getSplitClientForFlagset(flagsetname = '') {
     }
 }
 
-module.exports = { getSplitClient, getSplitClientForFlagset };
+module.exports = { getSplitClient };
