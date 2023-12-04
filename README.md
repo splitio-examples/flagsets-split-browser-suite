@@ -36,7 +36,7 @@ If you'd like to get a taste of the performance improvements possible with flag 
 
 # Set up a Split Metric and view results
 
-To measure the custom event `splitsdk.init_ready` ([created by the client code](https://github.com/splitio-examples/flagsets-split-browser-suite/blob/f2afc82de96243c9f2df03b9fccdfc6db4bb883f/client/split.js#L68-L69)), you'll need to create a metric, as shown below.
+To measure the custom event `splitsdk.init_ready` ([created by the client code](https://github.com/splitio-examples/flagsets-split-browser-suite/blob/master/client/split.js#L68-L69)), you'll need to create a metric, as shown below.
 
 ![Split UI](./performance_metric.jpg)
 
