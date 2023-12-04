@@ -12,7 +12,7 @@ module.exports = [{
     new CleanWebpackPlugin(),
     new Dotenv(),
     new HtmlWebpackPlugin({
-      title: 'Split RUM Agent example: async loading & production mode',
+      title: 'Split flag sets example: filtering by flag set & production mode',
       template: './client/index.html'
     }),
   ],
@@ -22,7 +22,7 @@ module.exports = [{
     path: path.resolve(__dirname, 'dist', 'on')
   },
 }, {
-  mode: 'development',
+  mode: 'production',
   entry: {
     index: './client/index-off.js',
   },
@@ -30,7 +30,7 @@ module.exports = [{
     new CleanWebpackPlugin(),
     new Dotenv(),
     new HtmlWebpackPlugin({
-      title: 'Split RUM Agent example: sync loading & development mode',
+      title: 'Split flag sets example: no filtering by flag set & production mode',
       template: './client/index.html'
     }),
   ],

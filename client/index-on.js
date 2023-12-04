@@ -1,10 +1,15 @@
-import { setupSplitOnPage } from './split.js';
+const { getSplitClient } = require('./split.js');
 
-/* Dynamically import a local module, which in turn imports '@splitsoftware/browser-rum-agent' for tree-shaking, resulting in a smaller app */
-import('./browser-split-suite').then(({ SplitSuite }) => {
-  
-  setupSplitOnPage(SplitSuite);
+(async () => {
 
-}).catch(error => {
-  console.log('An error occurred while loading the module: ' + error);
-});
+  const splitClient = await getSplitClient(process.env.FLAGSET_CLIENT_SIDE);
+  await splitClient.ready();
+
+  let imageSize = splitClient.getTreatment(process.env.FEATURE_FLAG_IMAGE_SIZE);
+    
+  // if the imageSize value is not one of the the imgur size modifiers, then don't use it
+  if( ! ['b', 's', 't', 'm', 'l', 'h'].includes(imageSize) ) imageSize = '';
+
+  document.getElementById('street_img').src = "https://i.imgur.com/q9b5x97" + imageSize + ".png";
+
+}) ();

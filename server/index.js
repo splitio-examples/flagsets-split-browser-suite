@@ -15,7 +15,7 @@ app.use('/', (req, res, next) => {
   if (req.query.id) {
 
     const optimizePage = splitClient.getTreatment(req.query.id, process.env.FEATURE_FLAG_OPTIMIZE_PAGE);
-
+  
     if (optimizePage === 'on') {
       return res.redirect('/on' + req.url);
     } else {
@@ -26,6 +26,8 @@ app.use('/', (req, res, next) => {
   next();
 });
 
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
+splitClient.ready().then(() => {
+  app.listen(3000, () => {
+    console.log('Server listening on port 3000');
+  });
 });
